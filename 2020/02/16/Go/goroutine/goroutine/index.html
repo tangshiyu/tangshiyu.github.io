@@ -17,18 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>Yu</title>
-  <meta name="description" content="僧侣所修之道，即为禅定之道，非禅不智，非智不禅の">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yu">
-<meta property="og:url" content="https://tangshiyu.github.io/index.html">
+  <title>Golang 中的 goroutine 理解 | Yu</title>
+  <meta name="description" content="[toc] Goroutine什么是goroutine相关概念 进程 进程是系统进行资源分配的和调度的基本单元，具有独立功能的程序在某个数据集合上的一次执行过程  线程   ​       线程是进程的一个执行实体或者执行单元，是比进程更小的且能独立运行的基本单元，一个进程至少会有一个线程  协程 协程又被称作为微协程，纤程。 协程相对独立有自己的上下文，由线程拉起，和线程相比协程避免了无意义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang 中的 goroutine 理解">
+<meta property="og:url" content="https://tangshiyu.github.io/2020/02/16/Go/goroutine/goroutine/index.html">
 <meta property="og:site_name" content="Yu">
-<meta property="og:description" content="僧侣所修之道，即为禅定之道，非禅不智，非智不禅の">
+<meta property="og:description" content="[toc] Goroutine什么是goroutine相关概念 进程 进程是系统进行资源分配的和调度的基本单元，具有独立功能的程序在某个数据集合上的一次执行过程  线程   ​       线程是进程的一个执行实体或者执行单元，是比进程更小的且能独立运行的基本单元，一个进程至少会有一个线程  协程 协程又被称作为微协程，纤程。 协程相对独立有自己的上下文，由线程拉起，和线程相比协程避免了无意义">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-16T02:22:56.000Z">
+<meta property="article:modified_time" content="2020-02-16T03:26:29.880Z">
 <meta property="article:author" content="Yu">
+<meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://tangshiyu.github.io/index.html">
+  <link rel="canonical" href="https://tangshiyu.github.io/2020/02/16/Go/goroutine/goroutine/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Yu" type="application/atom+xml">
   
@@ -257,47 +260,58 @@
 </aside>
 
   
-  <main class="main" role="main">
   
-  <div class="content article-list">
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#null"><span class="toc-number">1.</span> <span class="toc-text">Goroutine</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.1.</span> <span class="toc-text">什么是goroutine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.1.1.</span> <span class="toc-text">相关概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.2.</span> <span class="toc-text">CSP并发模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.3.</span> <span class="toc-text">GPM模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#null"><span class="toc-number">1.4.</span> <span class="toc-text">goroutine实际应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.4.1.</span> <span class="toc-text">使用wg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.4.2.</span> <span class="toc-text">使用channel传递信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#null"><span class="toc-number">1.4.3.</span> <span class="toc-text">sync.Pool</span></a></li></ol></li></ol></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Go/goroutine/goroutine" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
+    <div class="article-header">
+      
+        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/16/Go/goroutine/goroutine/">Golang 中的 goroutine 理解</a>
+    <h1 class="article-title" itemprop="name">
+      Golang 中的 goroutine 理解
     </h1>
   
 
-  </div>
-  
-  <p class="article-meta">
-    <span class="article-date">
+      
+      <div class="article-meta">
+        <span class="article-date">
     <i class="icon icon-calendar-check"></i>
 	<a href="/2020/02/16/Go/goroutine/goroutine/" class="article-date">
-	  <time datetime="2020-02-16T02:22:56.000Z" itemprop="datePublished">2020年02月16日</time>
+	  <time datetime="2020-02-16T02:22:56.000Z" itemprop="datePublished">2020-02-16</time>
 	</a>
 </span>
 
-    
+        
   <span class="article-category">
     <i class="icon icon-folder"></i>
     <a class="article-category-link" href="/categories/Go/">Go</a>
   </span>
 
-    
+        
   <span class="article-tag">
     <i class="icon icon-tags"></i>
 	<a class="article-tag-link" href="/tags/Go/" rel="tag">Go</a>
   </span>
 
 
-    <!-- 暂时去掉评论功能 -->
-    <!--
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/16/Go/goroutine/goroutine/#comments" class="article-comment-link">评论</a></span>
-    -->
-    
+        
+
+        <!-- 暂时去掉评论功能 -->
+        <!--
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/16/Go/goroutine/goroutine/#comments" class="article-comment-link">评论</a></span>
+        -->
+        
 	
 		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 224(字)</span>
 	
@@ -305,110 +319,166 @@
 		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
 	
 
-  </p>
-</article>
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <!-- ttoc -->
 
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/proxy/">代理模式</a>
-    </h1>
-  
+<p>[toc]</p>
+<h1><span id="goroutine">Goroutine</span></h1><h2><span id="什么是goroutine">什么是goroutine</span></h2><h3><span id="相关概念">相关概念</span></h3><ul>
+<li><p>进程</p>
+<p>进程是系统进行资源分配的和调度的基本单元，具有独立功能的程序在某个数据集合上的一次执行过程</p>
+</li>
+<li><p>线程</p>
+</li>
+</ul>
+<p>​       线程是进程的一个执行实体或者执行单元，是比进程更小的且能独立运行的基本单元，一个进程至少会有一个线程</p>
+<ul>
+<li><p>协程</p>
+<p>协程又被称作为微协程，纤程。</p>
+<p>协程相对独立有自己的上下文，由线程拉起，和线程相比协程避免了无意义的调度因此提高了性能，协程相对线程而言节约的是CPU的切换时间，但需要开发人员自己通过代码去调度</p>
+</li>
+<li><p>goroutine与它们的区别</p>
+</li>
+</ul>
+<h2><span id="csp并发模型">CSP并发模型</span></h2><h2><span id="gpm模型">GPM模型</span></h2><h2><span id="goroutine实际应用">goroutine实际应用</span></h2><p>00</p>
+<h3><span id="使用wg">使用wg</span></h3><p>00</p>
+<h3><span id="使用channel传递信息">使用channel传递信息</span></h3><p>00</p>
+<h3><span id="syncpool">sync.Pool</span></h3><p>##</p>
 
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://tangshiyu.github.io/2020/02/16/Go/goroutine/goroutine/" title="Golang 中的 goroutine 理解" target="_blank" rel="external" style="word-wrap: break-word;">https://tangshiyu.github.io/2020/02/16/Go/goroutine/goroutine/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/tangshiyu" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/tangshiyu" target="_blank"><span class="text-dark">Yu</span><small class="ml-1x">Software Developer</small></a></h3>
+        <div>僧侣所修之道，即为禅定之道，非禅不智，非智不禅の</div>
+      </div>
+    </figure>
   </div>
+</div>
+
+
+    </div>
+  </article>
   
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/02/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/proxy/" class="article-date">
-	  <time datetime="2020-02-15T02:08:40.000Z" itemprop="datePublished">2020年02月15日</time>
-	</a>
-</span>
-
     
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </span>
-
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
     
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a>
-  </span>
+  </section>
 
 
-    <!-- 暂时去掉评论功能 -->
-    <!--
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/proxy/#comments" class="article-comment-link">评论</a></span>
-    -->
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 335(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
-	
-
-  </p>
-</article>
-
-    
-      <article class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-  <div class="article-header">
-    
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/singleton/">单例模式</a>
-    </h1>
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
   
-
-  </div>
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2020/02/15/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/proxy/" title="代理模式"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+    <li class="toggle-toc">
+      <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false" title="文章目录" role="button">
+        <span>[&nbsp;</span><span>文章目录</span>
+        <i class="text-collapsed icon icon-anchor"></i>
+        <i class="text-in icon icon-close"></i>
+        <span>]</span>
+      </a>
+    </li>
+    
+  </ul>
   
-  <p class="article-meta">
-    <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2020/02/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/singleton/" class="article-date">
-	  <time datetime="2020-02-13T04:08:40.000Z" itemprop="datePublished">2020年02月13日</time>
-	</a>
-</span>
-
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
     
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-  </span>
-
-    
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a>
-  </span>
-
-
-    <!-- 暂时去掉评论功能 -->
-    <!--
-    <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/02/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/singleton/#comments" class="article-comment-link">评论</a></span>
-    -->
-    
-	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 314(字)</span>
-	
-	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
-	
-
-  </p>
-</article>
-
+    <div class="share-component" data-sites="weibo,qq,qzone,wechat,tencent,douban,facebook,twitter,google,linkedin" data-mobile-sites="weibo,qq,qzone,wechat,tencent,douban,,facebook,twitter,google,linkedin"></div>
     
   </div>
-
+  </div>
+</nav>
   
- 
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.jpg" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 </main>
 
   <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
@@ -507,6 +577,33 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
 
 
 
