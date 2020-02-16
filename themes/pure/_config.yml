@@ -247,9 +247,10 @@ profile:
   labels:
     - 后台开发
     - 微服务
-    - 容器
+    - Docker
     - 大数据
     - 云计算
+    - Linux
   # My Personal Works
   # works:
   #  Tangshiyu:

@@ -99,3 +99,7 @@ theme: pure
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: ''
+
+
+toc:
+  maxdepth: 3
