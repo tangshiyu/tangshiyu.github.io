@@ -206,7 +206,7 @@ profile:
   enabled: true # Whether to show profile bar
   avatar: images/avatar.jpg
   gravatar: # Gravatar email address, if you enable Gravatar, your avatar config will be overriden
-  author: Yu
+  author: Y Sir
   author_title: Software Developer
   author_description: 僧侣所修之道，即为禅定之道，非禅不智，非智不禅の
   location: GuangZhou, China
@@ -224,17 +224,8 @@ profile:
     link_tooltip: true # enable the social link tooltip, options: true, false
   # My Skills
   skills:
-    Golang: ★★★☆☆
-    Python: ★★★☆☆
-    Docker: ★★★☆☆
-    Linux: ★★★☆☆
-    K8s: ★★★☆☆
-    Mongodb: ★★★☆☆
-    Kafka: ★★★☆☆
-    Zookeeper: ★★★☆☆
-    Redis: ★★★☆☆
-    HBase: ★★★☆☆
-    Spark: ★★☆☆☆
+    # xx: ★★★☆☆
+
 
   # My Personal Links
   links:
@@ -245,12 +236,7 @@ profile:
     # Behance: https://www.behance.net/cofess
   # My Personal Labels
   labels:
-    - 后台开发
-    - 微服务
-    - Docker
-    - 大数据
-    - 云计算
-    - Linux
+
   # My Personal Works
   # works:
   #  Tangshiyu:
