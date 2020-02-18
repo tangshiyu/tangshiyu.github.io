@@ -1,5 +1,5 @@
 ---
-title: Golang 中的 goroutine 理解
+title: Golang 中的 goroutine 简单理解和使用
 description: 
 toc: true
 tags: Go
@@ -111,17 +111,102 @@ Process finished with exit code 0
 
 ### 使用channel传递信息
 
-00
+ channle一定得小心使用，一定不要滥用，channel使用不当很容器造成死锁，并且channel使用注意以下几点
+
+- 不能往关闭的channle发消息
+- 不能只发消息或者不能只接受消息，只在单一的goroutine里操作无缓冲信道，一定会死锁，例如下面代码中的订阅者，如果不加超时机制，如果发布者关闭或者退出了订阅者等待的消息永远等不到就会造成死锁
+- 两个通道依赖使用,一个通道的输出作为另外一个通道的输入，例如`c1<-<-c2`，这个很容易造成两个goroutine等待变成死锁
+
+简单的发布订阅通过channel实现如下:
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+
+// 简单的发布订阅，通过channel实现
+
+type Publisher struct {
+	PubMsg     chan string
+	StopSignal chan bool
+}
+
+// 发布者
+func publish(p Publisher, w *sync.WaitGroup) {
+	duration := time.Duration(1) * time.Second
+	tick := time.NewTicker(duration)
+	var msgCnt = 0
+	defer func() {
+		fmt.Println("publisher will exit.......")
+		tick.Stop()
+		w.Done()
+	}()
+	for {
+		select {
+		case <-tick.C:
+			// 每秒发布一条消息
+			p.PubMsg <- fmt.Sprintf("消息-%d", msgCnt)
+			msgCnt++
+
+			// 这里模拟关闭发布者
+			if msgCnt >= 5 {
+				return
+			}
+
+		case <-p.StopSignal:
+			fmt.Println("收到停止发送信号,将关闭publish...")
+			return
+		}
+	}
+}
+
+// 订阅者
+func subscriber(p Publisher, w *sync.WaitGroup) {
+	d := time.Duration(2) * time.Second
+	timeout := time.NewTimer(d)
+	defer func() {
+		fmt.Println("subscriber will exit.......")
+		timeout.Stop()
+		w.Done()
+	}()
+	for {
+		select {
+		case msg := <-p.PubMsg:
+			fmt.Printf("收到订阅消息:%s\n", msg)
+			timeout.Reset(d)
+		// 设置收取消息超时防止死锁
+		case <-timeout.C:
+			fmt.Println("收取消息超时!!!")
+			return
+		}
+	}
+}
+
+func main() {
+	// 消息通道
+	msgChan := make(chan string)
+	// 停止信号通道
+	singleChan := make(chan bool)
+	publisher := Publisher{msgChan, singleChan}
+	wg := &sync.WaitGroup{}
+
+	wg.Add(2)
+	go publish(publisher, wg)
+	go subscriber(publisher, wg)
+	wg.Wait()
+}
+```
 
 
 
-### sync.Pool
 
 
+## 总结
 
-## 
-
-
-
-
+goroutine本质是协程，也是Go实现并行的核心，用起来比较简单，但是用好它不太容易，使用时一定要设计好，考虑是否一定要用它。
 
